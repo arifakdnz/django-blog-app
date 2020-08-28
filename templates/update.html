@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% load crispy_forms_tags %}  <!-- crispy forms u kullanabilmek için ekledik -->
+
+<div class="row">
+  <div class="col-md-6 offset-md-3"> <!-- formu ortalaması için ekledik -->
+    <h3>Makale Güncelle</h3>
+    <hr>
+    <form method = "post", enctype="multipart/form-data"> 
+    {% csrf_token %}
+    {{form.media}}
+    {{form | crispy }} <!-- formlarımızı güzelleştirmek için -->
+    <br>
+
+    <button type = "submit" class = "btn btn-danger">Güncelle</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock body %}

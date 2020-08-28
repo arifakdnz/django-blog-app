@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<div class = "row">
+         <div class="col-md-10 offset-md-3">
+             <div class="col-lg-8">
+                <h3>Makaleler</h3>
+                 <hr>
+            </div>
+        </div>
+</div>  
+
+<div class = "row"> 
+
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <form> <!-- metodumuzu buraya yazmazsak get request olarak gidecek ve ayrıca action olmadığı için yine aynı sayfaya gidecek -->
+                {% csrf_token %}
+                <input type="text" name = "keyword" class = "input-sm" maxlength="64" placeholder="Ara..">   <!-- Place holder = arama çubuğunda silik yazan yazı -->       
+                <button type="submit" class="btn btn-danger ">Ara</button>    
+            </form>
+        </div>
+    </div>
+
+</div>
+ 
+
+
+{% if articles %}
+    {% for article in articles  %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 offset-md-3">
+                    <!-- Post Content Column -->
+                    <div class="col-lg-8">
+
+                        <!-- Title -->
+                        <h2 class="mt-4"><a href = "{% url 'article:detail' article.id %}">{{article.title}}</a></h2>  <!--Başlığın üstüne basıldığında makaleye gidecek-->
+
+                        <!-- Author -->
+                        <p class="lead">
+                        {{article.author.username}} tarafından yayınlandı.
+                        </p>
+
+                        <hr>
+
+                        <!-- Date/Time -->
+                        <p>{{article.created_date}}</p>
+
+                        <hr>
+
+                        <!-- Preview Image -->
+                        {% if article.article_image %}  <!-- Resim olmayan url lerde sorun çıkmaması için bu if durumunu ekledik -->
+                        <a href = "{% url 'article:detail' article.id %}"> <img class="img-fluid rounded" src="{{article.article_image.url}}" alt=""> </a> <!-- resmin üstüne basıldığında makaleye gidecel-->
+                        
+
+                        {% endif %}
+                        
+
+                        <hr>
+
+                        <!-- Post Content -->
+                        <p class = "lead">
+                        {{article.content|safe|truncatewords:70}} <!-- ckeditor'de yazıdığımız yazıların normal şekilde görünmesi için kullanıyoruz. Yani html kod olarak görünmemesi için -->
+                        <a href = "{% url 'article:detail' article.id %}">Okumaya Devam Et</a>
+                        </p> <!-- truncatedwords ile gösterilecek kelime sayısını filtreledik -->
+
+                        <hr>
+                        <br>
+
+                        </div> 
+                </div>
+                    
+            <!-- /.row -->
+            </div>      
+        </div>
+    {% endfor %}
+
+
+{% else %}
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <div class = "alert alert-danger">Makale Bulunamadı...</div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+{% endblock body %}
